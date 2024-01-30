@@ -15,10 +15,6 @@ type SNSMessage struct {
 	ID string `json:"id"`
 }
 
-type SNSMessageIn struct {
-	ID string `json:"id"`
-}
-
 func StatusProccess(ctx context.Context, snsEvent events.SNSEvent) error {
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String("us-east-1"),
@@ -66,9 +62,9 @@ func StatusProccess(ctx context.Context, snsEvent events.SNSEvent) error {
 				},
 			},
 		})
-		fmt.Println("snsMessage proccess: ", snsMessage)
+		fmt.Println("Mensaje SNS Procesado: ", snsMessage)
 		if err != nil {
-			fmt.Println("Error updating status:", err)
+			fmt.Println("Error actualizando el status:", err)
 			return err
 		}
 	}
