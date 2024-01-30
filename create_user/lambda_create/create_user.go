@@ -15,11 +15,10 @@ import (
 
 func CreateUser(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var newContact models.Contacts
-	fmt.Println(req.Body)
 
 	err := json.Unmarshal([]byte(req.Body), &newContact)
+
 	if err != nil {
-		fmt.Println(req.Body)
 		return events.APIGatewayProxyResponse{
 			StatusCode: 400,
 			Body:       "Error al decodificar el body de la solicitud",
@@ -29,6 +28,7 @@ func CreateUser(ctx context.Context, req events.APIGatewayProxyRequest) (events.
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String("us-east-1"),
 	})
+
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
@@ -38,7 +38,6 @@ func CreateUser(ctx context.Context, req events.APIGatewayProxyRequest) (events.
 
 	// Crear un cliente de DynamoDB
 	svc := dynamodb.New(sess)
-	fmt.Println(&svc)
 	tableName := "ContactsFC"
 
 	//Creo un UUID para el contacto y genero el valor en la tabla
@@ -63,8 +62,8 @@ func CreateUser(ctx context.Context, req events.APIGatewayProxyRequest) (events.
 
 	//Inserto el contacto en la tabla
 	_, err = svc.PutItem(input)
+
 	if err != nil {
-		fmt.Println("Aca esta rompiendo svc.PutItem(input)")
 		fmt.Println(err, " | "+err.Error())
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
